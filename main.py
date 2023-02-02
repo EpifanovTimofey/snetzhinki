@@ -7,7 +7,8 @@ snezhinki = []
 text = wrap.sprite.add_text(str(len(snezhinki)), 40, 40, font_size=80)
 s2 = None
 
-@wrap.always(500)
+
+@wrap.always(1000)
 def create_snezhinki():
     s1 = wrap.sprite.add("picture", random.randint(50, 650), -10)
     wrap.sprite.set_angle(s1, random.randint(1, 5))
@@ -19,7 +20,7 @@ def create_snezhinki():
 def snezhinka(pos_x, pos_y):
     for s in snezhinki:
         cost = wrap.sprite.get_costume(s)
-        if cost == "SNOWFLAKE":
+        if cost == "SNOWFLAKE" and s != s2:
             wrap.sprite.move(s, 0, wrap.sprite.get_angle(s))
         elif cost == "WATER":
             wrap.sprite.move(s, 0, 7)
@@ -38,16 +39,39 @@ def voda(pos_x, pos_y):
             wrap.sprite.set_angle(s, 90)
             break
 
+
 @wrap.on_mouse_down(wrap.BUTTON_RIGHT)
-def peretaskivanie1(pos_x,pos_y):
+def peretaskivanie1(pos_x, pos_y):
     global s2
     for s in snezhinki:
-        if wrap.sprite.is_collide_point(s, pos_x, pos_y, True):
+        if wrap.sprite.is_collide_point(s, pos_x, pos_y, True) and s2 == s2:
             s2 = s
+            if wrap.sprite.is_collide_sprite(s2,s):
+                s2 = None
+                return
+        if wrap.sprite.is_collide_point(s, pos_x, pos_y, True) and s2 == s:
+            s2 = None
+            return
+
+
+
+
+
+
+#если игрок нажал и у него есть снежинка, то
+    #отпустить снежинку
+    #return
+#если игрок нажал на снежинку, то
+    #взять снежинку
+    #return
+
+
+
+
+
 
 @wrap.on_mouse_move()
 def peretaskivanie2(pos_x, pos_y):
     global s2
     if s2 != None:
         wrap.sprite.move_to(s2, pos_x, pos_y)
-
